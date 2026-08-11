@@ -60,14 +60,14 @@ export const Header: React.FC<Props> = ({
   ];
 
   const navColors = {
-    'dashboard': { bg: 'bg-blue-500', hover: 'hover:bg-blue-50', text: 'text-blue-500', border: 'border-blue-200', badge: 'bg-blue-100 text-blue-500' },
-    'puroks': { bg: 'bg-emerald-500', hover: 'hover:bg-emerald-50', text: 'text-emerald-500', border: 'border-emerald-200', badge: 'bg-emerald-100 text-emerald-500' },
-    'residents': { bg: 'bg-purple-500', hover: 'hover:bg-purple-50', text: 'text-purple-500', border: 'border-purple-200', badge: 'bg-purple-100 text-purple-500' },
-    'households': { bg: 'bg-orange-500', hover: 'hover:bg-orange-50', text: 'text-orange-500', border: 'border-orange-200', badge: 'bg-orange-100 text-orange-500' },
-    'officials': { bg: 'bg-indigo-500', hover: 'hover:bg-indigo-50', text: 'text-indigo-500', border: 'border-indigo-200', badge: 'bg-indigo-100 text-indigo-500' },
-    'certificates': { bg: 'bg-pink-500', hover: 'hover:bg-pink-50', text: 'text-pink-500', border: 'border-pink-200', badge: 'bg-pink-100 text-pink-500' },
-    'blotter': { bg: 'bg-red-500', hover: 'hover:bg-red-50', text: 'text-red-500', border: 'border-red-200', badge: 'bg-red-100 text-red-500' },
-    'announcements': { bg: 'bg-cyan-500', hover: 'hover:bg-cyan-50', text: 'text-cyan-500', border: 'border-cyan-200', badge: 'bg-cyan-100 text-cyan-500' },
+    'dashboard': { bg: 'bg-blue-500', hover: 'hover:bg-blue-50', hoverText: 'hover:text-blue-500', text: 'text-blue-500', border: 'border-blue-200', badge: 'bg-blue-100 text-blue-500' },
+    'puroks': { bg: 'bg-emerald-500', hover: 'hover:bg-emerald-50', hoverText: 'hover:text-emerald-500', text: 'text-emerald-500', border: 'border-emerald-200', badge: 'bg-emerald-100 text-emerald-500' },
+    'residents': { bg: 'bg-purple-500', hover: 'hover:bg-purple-50', hoverText: 'hover:text-purple-500', text: 'text-purple-500', border: 'border-purple-200', badge: 'bg-purple-100 text-purple-500' },
+    'households': { bg: 'bg-orange-500', hover: 'hover:bg-orange-50', hoverText: 'hover:text-orange-500', text: 'text-orange-500', border: 'border-orange-200', badge: 'bg-orange-100 text-orange-500' },
+    'officials': { bg: 'bg-indigo-500', hover: 'hover:bg-indigo-50', hoverText: 'hover:text-indigo-500', text: 'text-indigo-500', border: 'border-indigo-200', badge: 'bg-indigo-100 text-indigo-500' },
+    'certificates': { bg: 'bg-pink-500', hover: 'hover:bg-pink-50', hoverText: 'hover:text-pink-500', text: 'text-pink-500', border: 'border-pink-200', badge: 'bg-pink-100 text-pink-500' },
+    'blotter': { bg: 'bg-red-500', hover: 'hover:bg-red-50', hoverText: 'hover:text-red-500', text: 'text-red-500', border: 'border-red-200', badge: 'bg-red-100 text-red-500' },
+    'announcements': { bg: 'bg-cyan-500', hover: 'hover:bg-cyan-50', hoverText: 'hover:text-cyan-500', text: 'text-cyan-500', border: 'border-cyan-200', badge: 'bg-cyan-100 text-cyan-500' },
   };
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export const Header: React.FC<Props> = ({
   return (
     <header className="text-black sticky top-0 z-20">
       {/* News Ticker */}
-      <div className="bg-black text-white/20 text-[12px] py-1.5 overflow-hidden">
+      <div className="bg-black text-[12px] py-1.5 overflow-hidden">
         <div className="relative overflow-hidden">
           <div
             ref={marqueeRef}
@@ -122,7 +122,7 @@ export const Header: React.FC<Props> = ({
 
       {/* Main Header */}
       <div className="px-4 py-3">
-        <div className="w-[90%] mx-auto bg-white/50 backdrop-blur-xs rounded-2xl px-4 py-3 border border-white/30 shadow-lg">
+        <div className="w-[90%] mx-auto bg-white/50 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/30 shadow-lg">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               {/* LOGO */}
@@ -200,7 +200,7 @@ export const Header: React.FC<Props> = ({
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
                       isActive
                         ? `${colors.bg} text-white shadow-md border ${colors.border}`
-                        : `text-gray-700 ${colors.hover} hover:${colors.text}`
+                        : `text-gray-700 ${colors.hover} ${colors.hoverText}`
                     }`}
                   >
                     <Icon className={`w-3.5 h-3.5 ${
@@ -224,7 +224,7 @@ export const Header: React.FC<Props> = ({
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="lg:hidden mt-2 bg-white/50 backdrop-blur-xs border border-gray-200 rounded-2xl p-3 space-y-1 shadow-xl">
+            <div className="lg:hidden mt-2 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-2xl p-3 space-y-1 shadow-xl">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;

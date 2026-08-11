@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Megaphone, Calendar, MapPin, Clock, Plus, Tag, X, Users, AlertCircle, Heart, Shield } from 'lucide-react';
+import { Megaphone, Calendar, MapPin, Clock, Plus, X, Users, AlertCircle, Heart, Shield } from 'lucide-react';
 import { Announcement, BarangayEvent } from '../types';
 
 interface Props {

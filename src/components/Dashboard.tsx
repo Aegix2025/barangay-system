@@ -1,30 +1,36 @@
 import React, { useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Pie } from 'react-chartjs-2';
+import { Bar, Pie, Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
+  BarController,
   LineElement,
+  LineController,
   PointElement,
   Title,
   ArcElement,
+  PieController,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js';
-import { Chart } from 'react-chartjs-2';
 
 ChartJS.register(
   ArcElement,
+  PieController,
   CategoryScale,
   LinearScale,
   BarElement,
+  BarController,
   LineElement,
+  LineController,
   PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 import { 
@@ -624,7 +630,7 @@ export const Dashboard: React.FC<Props> = ({
     return (
       <>
         {/* Welcome Banner */}
-        <div className="bg-white rounded-2xl p-6 shadow-xs border-[1px] border-gray-200 shadow-gray-200 relative overflow-hidden">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border-[1px] border-gray-200 shadow-gray-200 relative overflow-hidden">
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
