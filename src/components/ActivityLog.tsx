@@ -1,6 +1,6 @@
 // src/components/ActivityLog.tsx - NO DARKMODE
 import React, { useState } from 'react';
-import { Activity, Filter, X, Clock, User, FileText, Trash2, HelpCircle } from 'lucide-react';
+import { Activity, X, Clock, User, Trash2, HelpCircle } from 'lucide-react';
 import { useActivityLog } from '../hooks/useActivityLog';
 
 interface ActivityLogProps {

@@ -2686,6 +2686,25 @@ Please select a valid purok.`);
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
+                  {displayedResidents.length === 0 && (
+                    <tr>
+                      <td colSpan={8} className="px-4 py-16">
+                        <div className="flex flex-col items-center gap-3 text-center">
+                          <div className="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center">
+                            <Users className="w-7 h-7 text-purple-500" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-700">No Residents Found</p>
+                            <p className="text-xs text-gray-500 mt-0.5">
+                              {residents.length === 0
+                                ? 'No registered residents in Barangay SF II yet.'
+                                : 'Try adjusting your search or filters.'}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                   {displayedResidents.map((r) => {
                     const ageGroup = getAgeGroup(r.age);
                     return (
@@ -2718,16 +2737,16 @@ Please select a valid purok.`);
                         <td className="p-4 text-center">
                           <div className="flex flex-wrap gap-1 justify-center">
                             {r.senior_citizen && (
-                              <span className="bg-purple-100 text-purple-800 text-[10px] px-2 py-0.2 rounded-full font-bold">Senior</span>
+                              <span className="bg-purple-100 text-purple-800 text-[10px] px-2 py-0.5 rounded-full font-bold">Senior</span>
                             )}
                             {r.pwd && (
-                              <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.2 rounded-full font-bold">PWD</span>
+                              <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-full font-bold">PWD</span>
                             )}
                             {r.solo_parent && (
-                              <span className="bg-rose-100 text-rose-800 text-[10px] px-2 py-0.2 rounded-full font-bold">Solo Parent</span>
+                              <span className="bg-rose-100 text-rose-800 text-[10px] px-2 py-0.5 rounded-full font-bold">Solo Parent</span>
                             )}
                             {r.voter_status && (
-                              <span className="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.2 rounded-full font-bold">Voter</span>
+                              <span className="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded-full font-bold">Voter</span>
                             )}
                           </div>
                         </td>

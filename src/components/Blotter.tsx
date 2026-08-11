@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldAlert, Plus, Search, Filter, CheckCircle2, AlertTriangle, X } from 'lucide-react';
+import { ShieldAlert, Plus, Search, X } from 'lucide-react';
 import { BlotterRecord, BlotterStatus } from '../types';
 
 interface Props {
@@ -53,7 +53,7 @@ export const Blotter: React.FC<Props> = ({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-black text-black flex items-center gap-2">
             <ShieldAlert className="w-7 h-7 text-red-500" />
@@ -74,7 +74,7 @@ export const Blotter: React.FC<Props> = ({
       </div>
 
       {/* Filter Row */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs grid grid-cols-1 sm:grid-cols-12 gap-3">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-12 gap-3">
         <div className="sm:col-span-8 relative">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -104,7 +104,7 @@ export const Blotter: React.FC<Props> = ({
       {/* Blotter Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredBlotters.map((b) => (
-          <div key={b.blotter_id} className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
+          <div key={b.blotter_id} className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
             <div className="flex justify-between items-start">
               <div>
                 <span className="font-mono text-xs font-bold text-slate-400">{b.blotter_id}</span>

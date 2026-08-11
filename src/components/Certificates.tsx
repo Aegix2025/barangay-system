@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { FileText, Printer, CheckCircle, Search, ShieldCheck, Award, X } from 'lucide-react';
+import { FileText, Printer } from 'lucide-react';
 import { CertificateRecord, Resident, BarangayInfo, CertificateType } from '../types';
 
 interface Props {
@@ -12,7 +12,6 @@ interface Props {
 export const Certificates: React.FC<Props> = ({
   certificates,
   residents,
-  info,
   onIssueCertificate
 }) => {
   const [selectedType, setSelectedType] = useState<CertificateType>('Barangay Clearance');
@@ -125,7 +124,7 @@ export const Certificates: React.FC<Props> = ({
               </div>
               <script>
                 window.onload = function() { window.print(); }
-              <\/script>
+              <\u002fscript>
             </body>
           </html>
         `);
