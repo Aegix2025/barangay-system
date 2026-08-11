@@ -1,5 +1,5 @@
 // src/components/Residents.tsx - COMPLETE FIXED VERSION
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect, useRef, createContext, useContext } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import {
@@ -176,6 +176,151 @@ const formatFullName = (fullName: string) => {
   return `${firstName} ${lastName}`.trim();
 };
 
+const displayValue = (value: any) => {
+  if (value === null || value === undefined || value === '') return '—';
+  if (typeof value === 'string' && value.toLowerCase() === 'none') return '—';
+  if (Array.isArray(value) && value.length === 0) return '—';
+  return value;
+};
+
+const displayArray = (arr: string[] | undefined) => {
+  if (!arr || arr.length === 0) return '—';
+  const filtered = arr.filter(item => item && item.toLowerCase() !== 'none');
+  return filtered.length > 0 ? filtered.join(', ') : '—';
+};
+
+// ============================================================
+// EDIT FIELD CONTEXT
+// The edit inputs live at module scope so they keep their identity
+// between renders; otherwise React remounts them on every keystroke
+// and the focused input loses focus.
+// ============================================================
+interface EditFieldContextValue {
+  isEditMode: boolean;
+  resident: ExtendedResident;
+  editingResident: ExtendedResident | null;
+  updateField: (field: keyof ExtendedResident, value: any) => void;
+  firstInputRef: React.RefObject<HTMLInputElement>;
+}
+
+const EditFieldContext = createContext<EditFieldContextValue | null>(null);
+
+const useEditField = (field: keyof ExtendedResident) => {
+  const ctx = useContext(EditFieldContext);
+  if (!ctx) {
+    throw new Error('Edit fields must be rendered inside EditFieldContext.Provider');
+  }
+  const source = ctx.isEditMode && ctx.editingResident ? ctx.editingResident : ctx.resident;
+  return {
+    isEditMode: ctx.isEditMode,
+    value: source[field] ?? '',
+    updateField: ctx.updateField,
+    firstInputRef: ctx.firstInputRef,
+  };
+};
+
+const inputClassName =
+  'w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent';
+
+const EditInput = ({
+  field,
+  label,
+  type = 'text',
+  placeholder = ''
+}: {
+  field: keyof ExtendedResident;
+  label: string;
+  type?: string;
+  placeholder?: string;
+}) => {
+  const { isEditMode, value, updateField, firstInputRef } = useEditField(field);
+
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-600 mb-0.5">
+        {label}
+      </label>
+      {isEditMode ? (
+        <input
+          ref={field === 'first_name' ? firstInputRef : undefined}
+          type={type}
+          value={value as string}
+          onChange={(e) => updateField(field, e.target.value)}
+          className={inputClassName}
+          placeholder={placeholder}
+        />
+      ) : (
+        <span className="font-medium text-gray-800 text-sm block break-words">
+          {displayValue(value)}
+        </span>
+      )}
+    </div>
+  );
+};
+
+const EditSelect = ({
+  field,
+  label,
+  options
+}: {
+  field: keyof ExtendedResident;
+  label: string;
+  options: string[];
+}) => {
+  const { isEditMode, value, updateField } = useEditField(field);
+
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-600 mb-0.5">
+        {label}
+      </label>
+      {isEditMode ? (
+        <select
+          value={value as string}
+          onChange={(e) => updateField(field, e.target.value)}
+          className={inputClassName}
+        >
+          <option value="">Select {label}</option>
+          {options.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <span className="font-medium text-gray-800 text-sm block">
+          {displayValue(value)}
+        </span>
+      )}
+    </div>
+  );
+};
+
+const EditCheckbox = ({
+  field,
+  label
+}: {
+  field: keyof ExtendedResident;
+  label: string;
+}) => {
+  const { isEditMode, value, updateField } = useEditField(field);
+
+  return (
+    <div className="flex items-center gap-2 p-2.5 rounded-lg border border-gray-200 bg-white">
+      <input
+        type="checkbox"
+        checked={!!value}
+        onChange={(e) => updateField(field, e.target.checked)}
+        disabled={!isEditMode}
+        className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+      />
+      <label className="text-sm text-gray-700">
+        {label}
+      </label>
+    </div>
+  );
+};
+
 export const Residents: React.FC<Props> = ({
   residents,
   zones,
@@ -199,8 +344,7 @@ export const Residents: React.FC<Props> = ({
   const [formStep, setFormStep] = useState(0);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const firstInputRef = useRef<HTMLInputElement>(null);
-  const isTypingRef = useRef(false);
-  
+
 
   const [errors, setErrors] = useState({
     first_name: '',
@@ -808,26 +952,13 @@ Please select a valid purok.`);
     });
   };
 
-  const displayValue = (value: any) => {
-    if (value === null || value === undefined || value === '') return '—';
-    if (typeof value === 'string' && value.toLowerCase() === 'none') return '—';
-    if (Array.isArray(value) && value.length === 0) return '—';
-    return value;
-  };
-
-  const displayArray = (arr: string[] | undefined) => {
-    if (!arr || arr.length === 0) return '—';
-    const filtered = arr.filter(item => item && item.toLowerCase() !== 'none');
-    return filtered.length > 0 ? filtered.join(', ') : '—';
-  };
-
   useEffect(() => {
-    if (isEditing && firstInputRef.current && !isTypingRef.current) {
-      setTimeout(() => {
-        firstInputRef.current?.focus();
-      }, 100);
-    }
-  }, [isEditing]); // TANGGALIN ANG profileStep
+    if (!isEditing) return;
+    const timeout = setTimeout(() => {
+      firstInputRef.current?.focus();
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, [isEditing]);
 
   // ============================================================
   // RENDER PROFILE SECTION
@@ -933,146 +1064,7 @@ Please select a valid purok.`);
       });
     };
 
-    const EditInput = ({ 
-      field, 
-      label, 
-      type = "text", 
-      placeholder = "" 
-    }: { 
-      field: keyof ExtendedResident;
-      label: string;
-      type?: string;
-      placeholder?: string;
-    }) => {
-      const value = isEditMode && editingResident 
-        ? (editingResident[field] ?? '') 
-        : (resident[field] ?? '');
-      
-      return (
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-0.5">
-            {label}
-          </label>
-          {isEditMode ? (
-            <input
-              ref={field === 'first_name' ? firstInputRef : undefined}
-              type={type}
-              value={value as string}
-              onChange={(e) => {
-                isTypingRef.current = true; // NAGTA-TYPE
-                if (editingResident) {
-                  setEditingResident({
-                    ...editingResident,
-                    [field]: e.target.value
-                  });
-                }
-              }}
-              onBlur={() => {
-                setTimeout(() => {
-                  isTypingRef.current = false; // TAPOS NA MAGTA-TYPE
-                }, 200);
-              }}
-              className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder={placeholder}
-            />
-          ) : (
-            <span className="font-medium text-gray-800 text-sm block break-words">
-              {displayValue(value)}
-            </span>
-          )}
-        </div>
-      );
-    };
-
-    // ============================================================
-    // EDIT SELECT - DIREKTANG VALUE (FIXED)
-    // ============================================================
-    const EditSelect = ({ 
-      field, 
-      label, 
-      options 
-    }: { 
-      field: keyof ExtendedResident; 
-      label: string; 
-      options: string[];
-    }) => {
-      // DIREKTA: hindi dumadaan sa getFieldValue()
-      const value = isEditMode && editingResident 
-        ? (editingResident[field] ?? '') 
-        : (resident[field] ?? '');
-      
-      return (
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-0.5">
-            {label}
-          </label>
-          {isEditMode ? (
-            <select
-              value={value as string}
-              onChange={(e) => {
-                if (editingResident) {
-                  setEditingResident({
-                    ...editingResident,
-                    [field]: e.target.value
-                  });
-                }
-              }}
-              className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            >
-              <option value="">Select {label}</option>
-              {options.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <span className="font-medium text-gray-800 text-sm block">
-              {displayValue(value)}
-            </span>
-          )}
-        </div>
-      );
-    };
-
-    // ============================================================
-    // EDIT CHECKBOX - DIREKTANG VALUE (FIXED)
-    // ============================================================
-    const EditCheckbox = ({ 
-      field, 
-      label 
-    }: { 
-      field: keyof ExtendedResident; 
-      label: string;
-    }) => {
-      // DIREKTA: hindi dumadaan sa getFieldValue()
-      const checked = isEditMode && editingResident 
-        ? !!editingResident[field] 
-        : !!resident[field];
-      
-      return (
-        <div className="flex items-center gap-2 p-2.5 rounded-lg border border-gray-200 bg-white">
-          <input
-            type="checkbox"
-            checked={checked || false}
-            onChange={(e) => {
-              if (editingResident) {
-                setEditingResident({
-                  ...editingResident,
-                  [field]: e.target.checked
-                });
-              }
-            }}
-            disabled={!isEditMode}
-            className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-          />
-          <label className="text-sm text-gray-700">
-            {label}
-          </label>
-        </div>
-      );
-    };
-
+    const content = (() => {
     switch(step) {
       case 0: // BASIC INFO
         return (
@@ -1483,6 +1475,21 @@ Please select a valid purok.`);
       default:
         return null;
     }
+    })();
+
+    return (
+      <EditFieldContext.Provider
+        value={{
+          isEditMode,
+          resident,
+          editingResident,
+          updateField,
+          firstInputRef,
+        }}
+      >
+        {content}
+      </EditFieldContext.Provider>
+    );
   };
 
   return (
