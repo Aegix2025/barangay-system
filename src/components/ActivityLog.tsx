@@ -91,13 +91,13 @@ export const ActivityLog: React.FC<ActivityLogProps> = ({ onClose }) => {
       {showHelp && (
         <div className="p-3 bg-blue-50 border-b border-blue-200">
           <p className="text-xs text-blue-700">
-            <strong>📋 Activity Log:</strong> Ito ay talaan ng lahat ng ginawa sa system:
+            <strong>📋 Activity Log:</strong>
           </p>
           <ul className="text-xs text-blue-600 list-disc list-inside mt-1 space-y-0.5">
-            <li>Pag-add ng resident, household, blotter, certificate</li>
-            <li>Pag-edit ng blotter status</li>
-            <li>Pag-export ng reports</li>
-            <li>Bawat action ay may timestamp at user role</li>
+            <li>Add Resident, Household, Blotter, Certificate</li>
+            <li>Edit of blotter status</li>
+            <li>Exporting Reports</li>
+            <li>All actions has timestamp and user role</li>
           </ul>
         </div>
       )}

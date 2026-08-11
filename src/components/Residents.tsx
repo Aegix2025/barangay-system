@@ -1586,7 +1586,7 @@ Please select a valid purok.`);
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">Last Name *</label>
+                      <label className="block font-semibold text-gray-700 mb-1">Last Name</label>
                       <input
                         type="text"
                         required
@@ -1617,7 +1617,7 @@ Please select a valid purok.`);
                       </select>
                     </div>
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">Sex *</label>
+                      <label className="block font-semibold text-gray-700 mb-1">Sex</label>
                       <select
                         value={newRes.gender || ''}
                         onChange={(e) => {
@@ -1649,7 +1649,7 @@ Please select a valid purok.`);
                   </div>
 
                   <div className="mt-3">
-                    <label className="block font-semibold text-gray-700 mb-1">Birthday & Age *</label>
+                    <label className="block font-semibold text-gray-700 mb-1">Birthday & Age</label>
                     <div className="flex gap-2 items-center">
                       <select
                         value={newRes.birth_month}

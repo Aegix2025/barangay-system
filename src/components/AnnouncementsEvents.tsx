@@ -269,7 +269,7 @@ export const AnnouncementsEvents: React.FC<Props> = ({
             {activeTab === 'announcements' ? (
               <form onSubmit={handleAnnSubmit} className="p-6 space-y-4 text-xs">
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Title *</label>
+                  <label className="block font-semibold text-gray-700 mb-1">Title</label>
                   <input
                     type="text"
                     required
@@ -280,7 +280,7 @@ export const AnnouncementsEvents: React.FC<Props> = ({
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Category *</label>
+                  <label className="block font-semibold text-gray-700 mb-1">Category</label>
                   <select
                     value={newAnn.category}
                     onChange={(e) => setNewAnn({ ...newAnn, category: e.target.value as any })}
@@ -303,7 +303,7 @@ export const AnnouncementsEvents: React.FC<Props> = ({
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Content *</label>
+                  <label className="block font-semibold text-gray-700 mb-1">Content</label>
                   <textarea
                     required
                     rows={4}
@@ -321,7 +321,7 @@ export const AnnouncementsEvents: React.FC<Props> = ({
             ) : (
               <form onSubmit={handleEvtSubmit} className="p-6 space-y-4 text-xs">
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Event Name *</label>
+                  <label className="block font-semibold text-gray-700 mb-1">Event Name</label>
                   <input
                     type="text"
                     required
@@ -333,7 +333,7 @@ export const AnnouncementsEvents: React.FC<Props> = ({
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-1">Date *</label>
+                    <label className="block font-semibold text-gray-700 mb-1">Date</label>
                     <input
                       type="date"
                       required
@@ -343,7 +343,7 @@ export const AnnouncementsEvents: React.FC<Props> = ({
                     />
                   </div>
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-1">Time *</label>
+                    <label className="block font-semibold text-gray-700 mb-1">Time</label>
                     <input
                       type="text"
                       required
@@ -355,7 +355,7 @@ export const AnnouncementsEvents: React.FC<Props> = ({
                   </div>
                 </div>
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Location *</label>
+                  <label className="block font-semibold text-gray-700 mb-1">Location</label>
                   <input
                     type="text"
                     required
@@ -376,7 +376,7 @@ export const AnnouncementsEvents: React.FC<Props> = ({
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Description *</label>
+                  <label className="block font-semibold text-gray-700 mb-1">Description</label>
                   <textarea
                     required
                     rows={3}

@@ -36,7 +36,7 @@ export const PurokZones: React.FC<Props> = ({
   const maleCount = zoneResidents.filter(r => r.gender?.toLowerCase() === 'male').length;
   const femaleCount = zoneResidents.filter(r => r.gender?.toLowerCase() === 'female').length;
 
-  // Handle zone selection - calls the parent callback if provided
+
   const handleZoneSelect = (zoneId: string) => {
     setSelectedZoneId(zoneId);
     if (onSelectZoneFilter) {
@@ -46,12 +46,12 @@ export const PurokZones: React.FC<Props> = ({
 
   return (
     <div className="space-y-6">
-      {/* Title & Search */}
+      {}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
         <div>
           <h2 className="text-xl font-black text-gray-800 flex items-center gap-2">
             <MapPin className="w-6 h-6 text-emerald-500" />
-            <span>Purok 1–8 at mga Sektor ng Barangay SF II</span>
+            <span>Purok 1–8 and all Sectors of Barangay SF II</span>
           </h2>
           <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-2">
             <span>Nestor Nabaunag, Limay, Bataan</span>
@@ -157,7 +157,7 @@ export const PurokZones: React.FC<Props> = ({
                   <span className="w-px h-4 bg-gray-200"></span>
                   <span className="flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-emerald-500" />
-                    <strong>Lokasyon:</strong> Nestor Nabaunag, Limay, Bataan
+                    <strong>Location:</strong> Nestor Nabaunag, Limay, Bataan
                   </span>
                 </div>
               </div>
@@ -167,14 +167,14 @@ export const PurokZones: React.FC<Props> = ({
                 <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200">
                   <span className="text-[11px] text-gray-600 flex items-center gap-1">
                     <Building2 className="w-3.5 h-3.5 text-blue-500" />
-                    Kabuuan Household
+                    Whole Household
                   </span>
                   <span className="text-xl font-bold text-gray-900">{zoneHouseholds.length}</span>
                 </div>
                 <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200">
                   <span className="text-[11px] text-gray-600 flex items-center gap-1">
                     <Users className="w-3.5 h-3.5 text-emerald-500" />
-                    Populasyon
+                    Population
                   </span>
                   <span className="text-xl font-bold text-gray-900">{zoneResidents.length}</span>
                 </div>
@@ -199,14 +199,14 @@ export const PurokZones: React.FC<Props> = ({
                 <div className="bg-gray-50 p-3 rounded-xl border border-gray-200 flex justify-between items-center">
                   <span className="text-xs text-gray-600 flex items-center gap-1.5">
                     <Users className="w-3.5 h-3.5 text-teal-500" />
-                    Lalaki
+                    Male
                   </span>
                   <span className="text-sm font-bold text-gray-900">{maleCount}</span>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-xl border border-gray-200 flex justify-between items-center">
                   <span className="text-xs text-gray-600 flex items-center gap-1.5">
                     <Users className="w-3.5 h-3.5 text-pink-500" />
-                    Babae
+                    Female
                   </span>
                   <span className="text-sm font-bold text-gray-900">{femaleCount}</span>
                 </div>
@@ -217,7 +217,7 @@ export const PurokZones: React.FC<Props> = ({
                 <h4 className="font-bold text-sm text-gray-800 flex items-center justify-between">
                   <span className="flex items-center gap-2">
                     <Home className="w-4 h-4 text-emerald-500" />
-                    Mga Household sa {currentZone.zone_name}
+                    Household in {currentZone.zone_name}
                   </span>
                   <span className="text-xs text-gray-500 font-normal bg-gray-100 px-2 py-0.5 rounded-full">
                     {zoneHouseholds.length} families
@@ -243,7 +243,7 @@ export const PurokZones: React.FC<Props> = ({
                       <div className="flex items-center gap-4 text-xs shrink-0">
                         <span className="text-gray-600 flex items-center gap-1">
                           <Users className="w-3 h-3 text-emerald-500" />
-                          {h.number_of_members} Miyembro
+                          {h.number_of_members} Members
                         </span>
                         <span className="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
                           ₱{h.monthly_income.toLocaleString()} / mo
