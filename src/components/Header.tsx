@@ -60,14 +60,14 @@ export const Header: React.FC<Props> = ({
   ];
 
   const navColors = {
-    'dashboard': { bg: 'bg-blue-500', hover: 'hover:bg-blue-50', hoverText: 'hover:text-blue-500', text: 'text-blue-500', border: 'border-blue-200', badge: 'bg-blue-100 text-blue-500' },
-    'puroks': { bg: 'bg-emerald-500', hover: 'hover:bg-emerald-50', hoverText: 'hover:text-emerald-500', text: 'text-emerald-500', border: 'border-emerald-200', badge: 'bg-emerald-100 text-emerald-500' },
-    'residents': { bg: 'bg-purple-500', hover: 'hover:bg-purple-50', hoverText: 'hover:text-purple-500', text: 'text-purple-500', border: 'border-purple-200', badge: 'bg-purple-100 text-purple-500' },
-    'households': { bg: 'bg-orange-500', hover: 'hover:bg-orange-50', hoverText: 'hover:text-orange-500', text: 'text-orange-500', border: 'border-orange-200', badge: 'bg-orange-100 text-orange-500' },
-    'officials': { bg: 'bg-indigo-500', hover: 'hover:bg-indigo-50', hoverText: 'hover:text-indigo-500', text: 'text-indigo-500', border: 'border-indigo-200', badge: 'bg-indigo-100 text-indigo-500' },
-    'certificates': { bg: 'bg-pink-500', hover: 'hover:bg-pink-50', hoverText: 'hover:text-pink-500', text: 'text-pink-500', border: 'border-pink-200', badge: 'bg-pink-100 text-pink-500' },
-    'blotter': { bg: 'bg-red-500', hover: 'hover:bg-red-50', hoverText: 'hover:text-red-500', text: 'text-red-500', border: 'border-red-200', badge: 'bg-red-100 text-red-500' },
-    'announcements': { bg: 'bg-cyan-500', hover: 'hover:bg-cyan-50', hoverText: 'hover:text-cyan-500', text: 'text-cyan-500', border: 'border-cyan-200', badge: 'bg-cyan-100 text-cyan-500' },
+    'dashboard': { bg: 'bg-blue-500', hover: 'hover:bg-blue-50', text: 'text-blue-500', border: 'border-blue-200', badge: 'bg-blue-100 text-blue-500' },
+    'puroks': { bg: 'bg-emerald-500', hover: 'hover:bg-emerald-50', text: 'text-emerald-500', border: 'border-emerald-200', badge: 'bg-emerald-100 text-emerald-500' },
+    'residents': { bg: 'bg-purple-500', hover: 'hover:bg-purple-50', text: 'text-purple-500', border: 'border-purple-200', badge: 'bg-purple-100 text-purple-500' },
+    'households': { bg: 'bg-orange-500', hover: 'hover:bg-orange-50', text: 'text-orange-500', border: 'border-orange-200', badge: 'bg-orange-100 text-orange-500' },
+    'officials': { bg: 'bg-indigo-500', hover: 'hover:bg-indigo-50', text: 'text-indigo-500', border: 'border-indigo-200', badge: 'bg-indigo-100 text-indigo-500' },
+    'certificates': { bg: 'bg-pink-500', hover: 'hover:bg-pink-50', text: 'text-pink-500', border: 'border-pink-200', badge: 'bg-pink-100 text-pink-500' },
+    'blotter': { bg: 'bg-red-500', hover: 'hover:bg-red-50', text: 'text-red-500', border: 'border-red-200', badge: 'bg-red-100 text-red-500' },
+    'announcements': { bg: 'bg-cyan-500', hover: 'hover:bg-cyan-50', text: 'text-cyan-500', border: 'border-cyan-200', badge: 'bg-cyan-100 text-cyan-500' },
   };
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export const Header: React.FC<Props> = ({
   return (
     <header className="text-black sticky top-0 z-20">
       {/* News Ticker */}
-      <div className="bg-black text-[12px] py-1.5 overflow-hidden">
+      <div className="bg-black text-white/20 text-[12px] py-1.5 overflow-hidden">
         <div className="relative overflow-hidden">
           <div
             ref={marqueeRef}
@@ -122,20 +122,23 @@ export const Header: React.FC<Props> = ({
 
       {/* Main Header */}
       <div className="px-4 py-3">
-        <div className="w-[90%] mx-auto bg-white/60 backdrop-blur-xl rounded-2xl px-4 py-3 border border-white/40 shadow-lg">
+        <div className="w-[90%] mx-auto mt-4 bg-white/50 backdrop-blur-xs rounded-2xl px-4 py-3 border border-gray-200 shadow-lg">
+          
+          {/* TOP ROW: Logo + Barangay Name + Controls */}
           <div className="flex items-center justify-between gap-4">
+            {/* LEFT: Logo and Barangay Name */}
             <div className="flex items-center gap-4">
-              {/* LOGO */}
-              <div className="w-14 h-14 rounded-full bg-white border border-gray-200 flex items-center justify-center overflow-hidden shadow-md flex-shrink-0">
-                <img 
-                  src="/barangay-logo.png" 
-                  alt="Barangay SF II Logo" 
-                  className="w-full h-full object-cover rounded-full"
+              {/* LOGO - LAKIHAN */}
+              <div className="w-[110px] h-[110px] relative -right-2.5 flex-shrink-0 rounded-full overflow-hidden">
+                <img
+                  src="/barangay-logo.png"
+                  alt="Barangay SF II Logo"
+                  className="w-full h-full object-cover"
                 />
               </div>
 
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center relative -right-4 gap-2 -mt-12">
                   <h1 className="text-lg md:text-xl font-black text-black tracking-tight">
                     {info.barangay_name}
                   </h1>
@@ -143,7 +146,7 @@ export const Header: React.FC<Props> = ({
                     LIMAY, BATAAN
                   </span>
                 </div>
-                <p className="text-[11px] md:text-xs text-black font-bold flex items-center gap-2 mt-0.5">
+                <p className="text-[11px] md:text-xs text-black font-bold flex items-center relative -right-4 gap-2 mt-1.5">
                   <span>Barangay Information Management System</span>
                   <span className="text-gray-400">•</span>
                   <span>Captain: {info.barangay_captain}</span>
@@ -151,38 +154,29 @@ export const Header: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* Right Side Controls */}
-            <div className="flex items-center gap-1">
-              {/* Activity Log */}
+            {/* RIGHT: Controls */}
+            <div className="flex items-center gap-1 relative -left-[6%] -mt-[4%]">
               <button
                 onClick={onOpenActivityLog}
-                className="p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-2xl hover:bg-gray-100 transition-colors"
                 aria-label="Activity Log"
-                title="View activity log of all actions"
               >
                 <Activity className="w-5 h-5 text-gray-700" />
               </button>
-
-              {/* Notifications */}
               <Notifications />
-
-              {/* Role Switcher */}
               <RoleSwitcher />
-
-              {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-200 lg:hidden"
+                className="p-2 rounded-2xl hover:bg-gray-100 transition-all duration-200 border border-gray-200 lg:hidden"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="hidden lg:block mt-3">
+          <nav className="hidden lg:block -mt-10 mr-[5%]">
             <div 
-              className="flex items-center justify-center gap-7 overflow-x-auto py-1.5 px-2"
+              className="flex items-center justify-end gap-6 overflow-x-auto py-1.5 px-2"
               style={{
                 msOverflowStyle: 'none',
                 scrollbarWidth: 'none'
@@ -197,10 +191,10 @@ export const Header: React.FC<Props> = ({
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-3xl text-[12px] font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
                       isActive
                         ? `${colors.bg} text-white shadow-md border ${colors.border}`
-                        : `text-gray-700 ${colors.hover} ${colors.hoverText}`
+                        : `bg-gray-100 text-gray-700 ${colors.hover} hover:${colors.text}`
                     }`}
                   >
                     <Icon className={`w-3.5 h-3.5 ${
@@ -224,7 +218,7 @@ export const Header: React.FC<Props> = ({
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="lg:hidden mt-2 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-2xl p-3 space-y-1 shadow-xl">
+            <div className="lg:hidden mt-2 bg-white/50 backdrop-blur-xs border border-gray-200 rounded-2xl p-3 space-y-1 shadow-xl">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -237,7 +231,7 @@ export const Header: React.FC<Props> = ({
                       setActiveTab(item.id);
                       setMobileMenuOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-3xl text-xs font-semibold transition-all ${
                       isActive
                         ? `${colors.bg} text-white`
                         : `text-gray-700 ${colors.hover}`

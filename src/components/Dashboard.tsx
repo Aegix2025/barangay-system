@@ -630,7 +630,7 @@ export const Dashboard: React.FC<Props> = ({
     return (
       <>
         {/* Welcome Banner */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border-[1px] border-gray-200 shadow-gray-200 relative overflow-hidden">
+        <div className="bg-white rounded-2xl p-6 -mt-4 shadow-sm border-[1px] border-gray-200 shadow-gray-200 relative overflow-hidden">
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
               <div className="flex items-center gap-3 mb-2">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, Mail, Phone, Calendar, UserCheck } from 'lucide-react';
+import { Award, Mail, Phone, Calendar, UserCheck, Crown, Users } from 'lucide-react';
 import { BarangayOfficial } from '../types';
 
 interface Props {
@@ -7,19 +7,84 @@ interface Props {
 }
 
 export const Officials: React.FC<Props> = ({ officials }) => {
-  const captain = officials.find(o => o.position === 'Barangay Captain');
-  const secretary = officials.find(o => o.position === 'Barangay Secretary');
-  const treasurer = officials.find(o => o.position === 'Barangay Treasurer');
-  const skChair = officials.find(o => o.position === 'SK Chairman');
-  const kagawads = officials.filter(o => o.position === 'Barangay Kagawad');
+  const captain = officials.find(
+    o => o.position === 'Barangay Captain'
+  );
+
+  const secretary = officials.find(
+    o => o.position === 'Barangay Secretary'
+  );
+
+  const treasurer = officials.find(
+    o => o.position === 'Barangay Treasurer'
+  );
+
+  const skChair = officials.find(
+    o => o.position === 'SK Chairman'
+  );
+
+  const kagawads = officials.filter(
+    o => o.position === 'Barangay Kagawad'
+  );
+
+  // Logo component for officials - may iba't ibang logo
+  const OfficialAvatar = ({
+    name,
+    size = 'md',
+    isCaptain = false,
+  }: {
+    name: string;
+    size?: 'sm' | 'md' | 'lg';
+    isCaptain?: boolean;
+  }) => {
+    const sizeClasses = {
+      sm: "w-[90px] h-[90px]",
+      md: "w-[110px] h-[110px]",
+      lg: "w-[140px] h-[140px]",
+    };
+
+    // Iba't ibang logo para sa captain at sa iba
+    const logoSrc = isCaptain ? '/barangay-logo.png' : '/barangay-logo.png';
+    const bgColor = isCaptain ? ' border-[1px]' : 'bg-gray-50 border-gray-200';
+
+    return (
+      <div
+        className={`
+          ${sizeClasses[size]}
+          shrink-0
+          rounded-full
+          overflow-hidden
+          flex
+          items-center
+          justify-center
+          border-2
+          ${bgColor}
+          shadow-md
+        `}
+      >
+        {isCaptain ? (
+          <img
+            src="/barangay-logo.png"
+            alt={`${name} - Barangay Captain`}
+            className="w-full h-full object-cover rounded-full"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
+            <Users className="w-1/2 h-1/2 text-indigo-500" />
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-6">
+
       {/* Header Banner */}
-      <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+      <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm -mt-3">
         <h2 className="text-xl font-bold text-gray-700 flex items-center gap-2">
           <Award className="w-6 h-6 text-indigo-400" />
-          <span>Sangguniang Barangay at mga Opisyal (2023–2026)</span>
+          <span>Barangay SF II Officials (2026)</span>
         </h2>
         <p className="text-xs text-gray-700 mt-0.5">
           Barangay SF II, Nestor Nabaunag, Limay, Bataan • Barangay Council Directory
@@ -28,74 +93,110 @@ export const Officials: React.FC<Props> = ({ officials }) => {
 
       {/* Barangay Captain Hero Card */}
       {captain && (
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 text-gray-700 shadow-lg flex flex-col md:flex-row items-center gap-6">
-          <div className="w-24 h-24 rounded-full bg-white p-1 shrink-0 shadow-md">
-            <img
-              src={captain.avatar_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"}
-              alt={captain.full_name}
-              className="w-full h-full object-cover rounded-full"
-            />
-          </div>
-
+        <div className="bg-transparent border-[1px] border-gray-200 rounded-2xl p-6 text-gray-800 flex flex-col md:flex-row items-center gap-6">
           <div className="space-y-2 text-center md:text-left flex-grow">
-            <div className="inline-block bg-none text-gray-700 border border-gray-200 px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider">
+            <div className=" bg-white text-amber-700 border-gray-50 border-[1px] px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+              <Crown className="w-3 h-3" />
               {captain.position}
             </div>
-            <h3 className="text-2xl font-bold text-gray-700">{captain.full_name}</h3>
-            <p className="text-xs text-gray-700 max-w-xl">
+            <h3 className="text-2xl font-bold text-gray-700">
+              {captain.full_name}
+            </h3>
+            <p className="text-xs text-gray-800 max-w-xl">
               Punong Barangay ng SF II, Nestor Nabaunag, Limay, Bataan • Head of Executive & Peace and Order Committee
             </p>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-gray-700 pt-2">
-              <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5 text-indigo-400" /> {captain.contact_number}</span>
-              <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5 text-indigo-400" /> {captain.email}</span>
-              <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-indigo-400" /> Term: 2023 – 2026</span>
+              <span className="flex items-center gap-1">
+                <Phone className="w-3.5 h-3.5 text-indigo-400" />
+                {captain.contact_number}
+              </span>
+              <span className="flex items-center gap-1">
+                <Mail className="w-3.5 h-3.5 text-indigo-400" />
+                {captain.email}
+              </span>
+              <span className="flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                Term: 2023 – 2026
+              </span>
             </div>
           </div>
+          <OfficialAvatar name={captain.full_name} size="lg" isCaptain={true} />
         </div>
       )}
 
-      {/* Appointed Officials: Secretary, Treasurer, SK Chairman */}
+      {/* Appointed Officials */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[secretary, treasurer, skChair].map((off) => {
           if (!off) return null;
           return (
-            <div key={off.official_id} className="bg-white p-5 rounded-2xl border border-gray-200 space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md">
-                {off.position}
-              </span>
-              <h4 className="font-bold text-base text-gray-700">{off.full_name}</h4>
-              <p className="text-xs text-gray-700">{off.committee}</p>
-              <div className="text-xs text-gray-700 pt-2 border-t border-gray-200 space-y-1">
-                <p>📞 {off.contact_number}</p>
-                <p>✉️ {off.email}</p>
+            <div
+              key={off.official_id}
+              className="bg-white p-5 rounded-2xl border border-gray-200 space-y-2 flex items-start gap-4 hover:shadow-md transition-shadow -mt-2"
+            >
+              <div className="flex-1">
+                <span className="relative -top-3 text-[10px] font-bold uppercase tracking-wider text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md">
+                  {off.position}
+                </span>
+                <h4 className="relative -top-2.5 font-bold text-base text-gray-700">
+                  {off.full_name}
+                </h4>
+                <p className="relative -top-1 text-xs text-gray-900">
+                  {off.committee || '—'}
+                </p>
+                <div className="text-xs text-gray-700 pt-2 border-gray-200">
+                  <p className="relative -bottom-0.5 flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-indigo-400" />
+                    {off.contact_number}
+                  </p>
+                  <p className="relative -bottom-2 flex items-center gap-2">
+                    <Mail className="w-3.5 h-3.5 text-indigo-400" />
+                    {off.email}
+                  </p>
+                </div>
               </div>
+              <OfficialAvatar name={off.full_name} size="sm" isCaptain={false} />
             </div>
           );
         })}
       </div>
 
-      {/* 7 Barangay Kagawads Grid */}
+      {/* Barangay Kagawads */}
       <div className="space-y-3">
-        <h3 className="text-base font-bold text-gray-700 flex items-center gap-2">
+        <h3 className="text-base font-bold text-gray-700 flex items-center gap-2 -mt-2">
           <UserCheck className="w-5 h-5 text-indigo-400" />
           <span>Barangay Kagawad (7 Members)</span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {kagawads.map((k) => (
-            <div key={k.official_id} className="bg-white p-5 rounded-2xl border border-gray-200 hover:border-gray-300 transition-all space-y-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md inline-block mb-1">
-                  {k.committee}
-                </span>
-                <h4 className="font-bold text-base text-gray-700">{k.full_name}</h4>
-                <p className="text-xs text-gray-700 font-semibold">{k.position}</p>
+            <div
+              key={k.official_id}
+              className="bg-white p-5 rounded-2xl border border-gray-200 hover:border-indigo-200 hover:shadow-md transition-all space-y-3 flex items-start gap-4"
+            >
+              <div className="flex-1">
+                <div>
+                  <span className="relative -top-3 text-[10px] font-bold uppercase tracking-wider text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md inline-block mb-1">
+                    {k.committee || 'Member'}
+                  </span>
+                  <h4 className="relative -top-2.5 font-bold text-base text-gray-700">
+                    {k.full_name}
+                  </h4>
+                  <p className="relative -top-1 text-xs text-gray-700 font-semibold">
+                    {k.position}
+                  </p>
+                </div>
+                <div className="text-xs text-gray-700 space-y-1 pt-2 border-gray-200">
+                  <p className="relative -bottom-0.5 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-indigo-400" />
+                    {k.contact_number}
+                  </p>
+                  <p className="relative -bottom-2 flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-indigo-400" />
+                    {k.email}
+                  </p>
+                </div>
               </div>
-
-              <div className="text-xs text-gray-700 space-y-1 pt-2 border-t border-gray-200">
-                <p className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-indigo-400" /> {k.contact_number}</p>
-                <p className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-indigo-400" /> {k.email}</p>
-              </div>
+              <OfficialAvatar name={k.full_name} size="sm" isCaptain={false} />
             </div>
           ))}
         </div>
