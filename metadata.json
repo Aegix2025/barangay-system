@@ -1,0 +1,6 @@
+{
+  "name": "Barangay SF II Information System",
+  "description": "Barangay Information Management System for Barangay SF II, Nestor Nabaunag, Limay, Bataan featuring Purok 1-8 demographic records, officials, certificates, blotters, announcements, and SQL/JSON database generator.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
