@@ -122,7 +122,7 @@ export const Header: React.FC<Props> = ({
 
       {/* Main Header */}
       <div className="px-4 py-3 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div className="w-[90%] mx-auto bg-white rounded-2xl px-4 py-3 border border-gray-200 shadow-sm">
+        <div className="w-[90%] mx-auto bg-white/70 backdrop-blur-xl rounded-2xl px-4 py-3 border border-white/60 shadow-lg">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               {/* LOGO */}
