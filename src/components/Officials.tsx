@@ -1,5 +1,14 @@
 import React from 'react';
-import { Award, Mail, Phone, Calendar, UserCheck, Crown, Users } from 'lucide-react';
+import {
+  Award,
+  Mail,
+  Phone,
+  Calendar,
+  UserCheck,
+  Crown,
+  Users,
+} from 'lucide-react';
+
 import { BarangayOfficial } from '../types';
 
 interface Props {
@@ -8,26 +17,28 @@ interface Props {
 
 export const Officials: React.FC<Props> = ({ officials }) => {
   const captain = officials.find(
-    o => o.position === 'Barangay Captain'
+    (o) => o.position === 'Barangay Captain'
   );
 
   const secretary = officials.find(
-    o => o.position === 'Barangay Secretary'
+    (o) => o.position === 'Barangay Secretary'
   );
 
   const treasurer = officials.find(
-    o => o.position === 'Barangay Treasurer'
+    (o) => o.position === 'Barangay Treasurer'
   );
 
   const skChair = officials.find(
-    o => o.position === 'SK Chairman'
+    (o) => o.position === 'SK Chairman'
   );
 
   const kagawads = officials.filter(
-    o => o.position === 'Barangay Kagawad'
+    (o) => o.position === 'Barangay Kagawad'
   );
 
-  
+  // ==========================================
+  // OFFICIAL AVATAR
+  // ==========================================
   const OfficialAvatar = ({
     name,
     size = 'md',
@@ -38,12 +49,10 @@ export const Officials: React.FC<Props> = ({ officials }) => {
     isCaptain?: boolean;
   }) => {
     const sizeClasses = {
-      sm: 'w-12 h-12',
-      md: 'w-16 h-16',
-      lg: 'w-24 h-24',
+      sm: 'w-[95px] h-[95px]',
+      md: 'w-[100px] h-[100px]',
+      lg: 'w-[130px] h-[130px]',
     };
-
-    const bgColor = isCaptain ? 'bg-amber-50 border-amber-200' : 'bg-gray-50 border-gray-200';
 
     return (
       <div
@@ -55,9 +64,10 @@ export const Officials: React.FC<Props> = ({ officials }) => {
           flex
           items-center
           justify-center
-          border-2
-          ${bgColor}
-          shadow-md
+          border-[0.5px]
+          border-gray-50
+          relative
+          -left-10
         `}
       >
         {isCaptain ? (
@@ -78,127 +88,356 @@ export const Officials: React.FC<Props> = ({ officials }) => {
   return (
     <div className="space-y-6">
 
-      {/* Header Banner */}
+      {/* ==========================================
+          HEADER BANNER
+      ========================================== */}
       <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm -mt-4">
         <h2 className="text-xl font-bold text-gray-700 flex items-center gap-2">
           <Award className="w-6 h-6 text-indigo-400" />
-          <span>Barangay SF II Officials (2026)</span>
+
+          <span>
+            Barangay SF II Officials (2026)
+          </span>
         </h2>
-        <p className="text-xs text-gray-700 mt-0.5">
-          Barangay SF II, Nestor Nabaunag, Limay, Bataan • Barangay Council Directory
+
+        <p className="text-xs text-gray-700 mt-1">
+          Barangay SF II, Nestor Nabaunag, Limay, Bataan •
+          Barangay Council Directory
         </p>
       </div>
 
-      {/* Barangay Captain Hero Card */}
+
+      {/* ==========================================
+          BARANGAY CAPTAIN
+      ========================================== */}
       {captain && (
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 text-gray-800 flex flex-col md:flex-row items-center gap-6 shadow-sm -mt-[5%]">
-          <div className="space-y-2 text-center md:text-left flex-grow">
-            <div className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+        <div className="
+          bg-white
+          border
+          border-gray-200
+          rounded-2xl
+          p-3
+          text-gray-800
+          flex
+          flex-col
+          md:flex-row
+          items-center
+          gap-5
+          shadow-sm
+          relative
+          -top-2
+        ">
+
+          {/* Captain Information */}
+          <div className="flex-grow space-y-2 text-center md:text-left relative left-4">
+
+            {/* Position */}
+            <div className="
+              inline-flex
+              items-center
+              gap-1.5
+              bg-amber-50
+              text-amber-700
+              border
+              border-amber-200
+              px-3
+              py-1
+              rounded-full
+              text-xs
+              font-bold
+              uppercase
+              tracking-wider
+              relative
+              top-1
+            ">
               <Crown className="w-3 h-3" />
-              {captain.position}
+
+              <span>
+                {captain.position}
+              </span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-700">
+
+            {/* Name */}
+            <h3 className="relative -top-0.5 text-2xl font-bold text-gray-700">
               {captain.full_name}
             </h3>
-            <p className="text-xs text-gray-600 max-w-xl">
-              Punong Barangay ng SF II, Nestor Nabaunag, Limay, Bataan • Head of Executive & Peace and Order Committee
+
+            {/* Description */}
+            <p className="relative -top-1 text-xs text-gray-600 max-w-xl">
+              Punong Barangay ng SF II, Nestor Nabaunag,
+              Limay, Bataan • Head of Executive & Peace and
+              Order Committee
             </p>
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-gray-700 pt-2">
-              <span className="flex items-center gap-1">
+
+            {/* Contact Information */}
+            <div className="
+              flex
+              flex-wrap
+              items-center
+              justify-center
+              md:justify-start
+              gap-4
+              text-xs
+              text-gray-700
+              pt-2
+              relative -top-1
+            ">
+
+              <span className="flex items-center gap-1.5">
                 <Phone className="w-3.5 h-3.5 text-indigo-400" />
                 {captain.contact_number}
               </span>
-              <span className="flex items-center gap-1">
+
+              <span className="flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5 text-indigo-400" />
                 {captain.email}
               </span>
-              <span className="flex items-center gap-1">
+
+              <span className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-indigo-400" />
                 Term: 2023 – 2026
               </span>
             </div>
           </div>
-          <OfficialAvatar name={captain.full_name} size="lg" isCaptain={true} />
+          {/* Captain Logo */}
+          <OfficialAvatar
+            name={captain.full_name}
+            size="lg"
+            isCaptain={true}
+          />
         </div>
       )}
-
-      {/* Appointed Officials */}
+      {/* ==========================================
+          APPOINTED OFFICIALS
+      ========================================== */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[secretary, treasurer, skChair].map((off) => {
           if (!off) return null;
           return (
             <div
               key={off.official_id}
-              className="bg-white p-5 rounded-2xl border border-gray-200 space-y-2 flex items-start gap-4 hover:shadow-md transition-shadow"
+              className="
+                bg-white
+                p-5
+                rounded-2xl
+                border
+                border-gray-200
+                flex
+                items-start
+                gap-4
+                hover:shadow-md
+                transition-shadow
+                relative
+                -mt-4
+              "
             >
-              <div className="flex-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md inline-block">
+              {/* Information */}
+              <div className="flex-1 min-w-0">
+                {/* Position */}
+                <span className="
+                  inline-block
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  text-gray-700
+                  bg-indigo-200
+                  px-2
+                  py-0.5
+                  rounded-xl
+                  relative
+                  -top-2
+                ">
                   {off.position}
                 </span>
-                <h4 className="font-bold text-base text-gray-700 mt-1">
+
+                {/* Name */}
+                <h4 className="
+                  font-bold
+                  text-base
+                  text-gray-700
+                  relative
+                  -top-1
+                ">
                   {off.full_name}
                 </h4>
-                <p className="text-xs text-gray-600">
+
+                {/* Committee */}
+                <p className="text-xs text-gray-600 mt-0.5">
                   {off.committee || '—'}
                 </p>
-                <div className="text-xs text-gray-700 pt-2 border-t border-gray-200 mt-2 space-y-1">
-                  <p className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-indigo-400" />
-                    {off.contact_number}
+
+                {/* Contact */}
+                <div className="
+                  text-xs
+                  text-gray-700
+                  pt-2
+                  border-gray-200
+                  mt-2
+                  space-y-1
+                ">
+                  <p className="relative -top-1 flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+
+                    <span className="truncate">
+                      {off.contact_number}
+                    </span>
                   </p>
-                  <p className="flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-indigo-400" />
-                    {off.email}
+                  <p className="relative top-1 flex items-center gap-2">
+                    <Mail className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+
+                    <span className="truncate">
+                      {off.email}
+                    </span>
                   </p>
                 </div>
               </div>
-              <OfficialAvatar name={off.full_name} size="sm" isCaptain={false} />
+
+              {/* Avatar */}
+              <OfficialAvatar
+                name={off.full_name}
+                size="sm"
+                isCaptain={false}
+              />
             </div>
           );
         })}
       </div>
 
-      {/* Barangay Kagawads */}
+      {/* ==========================================
+          BARANGAY KAGAWAD
+      ========================================== */}
       <div className="space-y-3">
-        <h3 className="text-base font-bold text-gray-700 flex items-center gap-2">
+        {/* Section Title */}
+        <h3 className="
+          text-base
+          font-bold
+          text-gray-700
+          flex
+          items-center
+          gap-2
+          -mt-3
+        ">
           <UserCheck className="w-5 h-5 text-indigo-400" />
-          <span>Barangay Kagawad (7 Members)</span>
+          <span>
+            Barangay Kagawad (7 Members)
+          </span>
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Kagawad Grid */}
+        <div className="
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-3
+          gap-4
+        ">
           {kagawads.map((k) => (
             <div
               key={k.official_id}
-              className="bg-white p-5 rounded-2xl border border-gray-200 hover:border-indigo-200 hover:shadow-md transition-all space-y-3 flex items-start gap-4"
+              className="
+                bg-white
+                p-5
+                rounded-2xl
+                border
+                border-gray-200
+                hover:border-indigo-200
+                hover:shadow-md
+                transition-all
+                flex
+                items-start
+                gap-4
+              "
             >
-              <div className="flex-1">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md inline-block -mt-4">
-                    {k.committee || 'Member'}
-                  </span>
-                  <h4 className="font-bold text-base text-gray-700 mt-1">
-                    {k.full_name}
-                  </h4>
-                  <p className="relative -mt-4 text-xs text-gray-600 font-semibold">
-                    {k.position}
+              {/* Information */}
+              <div className="flex-1 min-w-0">
+                {/* Committee */}
+                <span className="
+                  inline-block
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  text-gray-700
+                  bg-indigo-200
+                  px-2
+                  py-0.5
+                  rounded-xl
+                  relative
+                  -top-2
+                ">
+                  {k.committee || 'Member'}
+                </span>
+
+                {/* Name */}
+                <h4 className="
+                  font-bold
+                  text-base
+                  text-gray-700
+                  relative
+                  -top-1
+                ">
+                  {k.full_name}
+                </h4>
+
+
+                {/* Position */}
+                <p className="
+                  text-xs
+                  text-gray-600
+                  font-semibold
+                  mt-0.5
+                ">
+                  {k.position}
+                </p>
+
+
+                {/* Contact Information */}
+                <div className="
+                  text-xs
+                  text-gray-700
+                  pt-2
+                  border-gray-200
+                  mt-2
+                  space-y-1
+                ">
+
+                  <p className="relative -top-1 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+
+                    <span className="truncate">
+                      {k.contact_number}
+                    </span>
                   </p>
+
+                  <p className="relative top-1 flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+
+                    <span className="truncate">
+                      {k.email}
+                    </span>
+                  </p>
+
                 </div>
-                <div className="text-xs text-gray-700 pt-2 border-t border-gray-200 mt-2 space-y-1">
-                  <p className="flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 text-indigo-400" />
-                    {k.contact_number}
-                  </p>
-                  <p className="flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-indigo-400" />
-                    {k.email}
-                  </p>
-                </div>
+
               </div>
-              <OfficialAvatar name={k.full_name} size="sm" isCaptain={false} />
+
+
+              {/* Avatar */}
+              <OfficialAvatar
+                name={k.full_name}
+                size="sm"
+                isCaptain={false}
+              />
+
             </div>
+
           ))}
+
         </div>
+
       </div>
+
     </div>
   );
 };
