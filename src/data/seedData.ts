@@ -154,7 +154,7 @@ export const INITIAL_OFFICIALS: BarangayOfficial[] = [
   },
   { 
     official_id: 'OFF-011', 
-    full_name: 'Kristine Joy M. Nabaunag', 
+    full_name: 'JohnPaul Nabaunag', 
     position: 'SK Chairman', 
     committee: 'Youth and Development',
     contact_number: '0917-123-0011',
