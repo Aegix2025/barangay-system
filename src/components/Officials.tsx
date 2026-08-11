@@ -9,7 +9,6 @@ import {
   Users,
   Loader2,
 } from 'lucide-react';
-import { getOfficials } from '../lib/db';
 
 interface BarangayOfficial {
   official_id: number;
@@ -21,6 +20,82 @@ interface BarangayOfficial {
   image_url: string | null;
   is_active: boolean;
 }
+
+// ==========================================
+// MOCK DATA - Directly in the component
+// ==========================================
+const MOCK_OFFICIALS: BarangayOfficial[] = [
+  {
+    official_id: 1,
+    full_name: 'Nestor Nabuang Jr.',
+    position: 'Barangay Captain',
+    contact_number: '09171234567',
+    email: 'nestor@barangay.com',
+    committee: 'Executive Committee',
+    image_url: null,
+    is_active: true
+  },
+  {
+    official_id: 2,
+    full_name: 'Sally Espinosa',
+    position: 'Barangay Secretary',
+    contact_number: '09171234568',
+    email: 'sally@barangay.com',
+    committee: 'Records & Documentation',
+    image_url: null,
+    is_active: true
+  },
+  {
+    official_id: 3,
+    full_name: 'Catherine D. Cinco',
+    position: 'Barangay Treasurer',
+    contact_number: '09171234569',
+    email: 'catherine@barangay.com',
+    committee: 'Finance & Budget',
+    image_url: null,
+    is_active: true
+  },
+  {
+    official_id: 4,
+    full_name: 'JohnPaul Nabaunag',
+    position: 'SK Chairman',
+    contact_number: '09171234570',
+    email: 'johnpaul@barangay.com',
+    committee: 'Youth & Sports Development',
+    image_url: null,
+    is_active: true
+  },
+  {
+    official_id: 5,
+    full_name: 'Jose Garcia',
+    position: 'Barangay Kagawad',
+    contact_number: '09171234571',
+    email: 'jose@barangay.com',
+    committee: 'Committee on Peace and Order',
+    image_url: null,
+    is_active: true
+  },
+  {
+    official_id: 6,
+    full_name: 'Rosa Cruz',
+    position: 'Barangay Kagawad',
+    contact_number: '09171234572',
+    email: 'rosa@barangay.com',
+    committee: 'Committee on Health',
+    image_url: null,
+    is_active: true
+  },
+  {
+    official_id: 7,
+    full_name: 'Lito Reyes',
+    position: 'Barangay Kagawad',
+    contact_number: '09171234573',
+    email: 'lito@barangay.com',
+    committee: 'Committee on Education',
+    image_url: null,
+    is_active: true
+  }
+];
 
 export const Officials: React.FC = () => {
   const [officials, setOfficials] = useState<BarangayOfficial[]>([]);
@@ -35,14 +110,15 @@ export const Officials: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log('🔄 Fetching officials from Supabase...');
+      console.log('🔄 Loading mock officials data...');
       
-      const data = await getOfficials();
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      console.log('✅ Data received:', data?.length || 0, 'records');
-      setOfficials(data || []);
+      setOfficials(MOCK_OFFICIALS);
+      console.log('✅ Loaded', MOCK_OFFICIALS.length, 'officials');
     } catch (err: any) {
-      console.error('❌ Error fetching officials:', err);
+      console.error('❌ Error loading officials:', err);
       setError(err.message || 'Failed to load officials. Please try again.');
     } finally {
       setLoading(false);

@@ -2,7 +2,8 @@
 import { useState, useMemo } from 'react';
 import { 
   INITIAL_BARANGAY_INFO, 
-  INITIAL_ZONES,  
+  INITIAL_ZONES, 
+  INITIAL_OFFICIALS, 
   INITIAL_ANNOUNCEMENTS, 
   INITIAL_EVENTS, 
   INITIAL_BLOTTERS, 
@@ -27,6 +28,7 @@ import {
   Zone, 
   Household, 
   Resident, 
+  BarangayOfficial, 
   CertificateRecord, 
   BlotterRecord, 
   Announcement, 
@@ -48,6 +50,7 @@ const AppContent = () => {
   // State for data - using seed data
   const [barangayInfo] = useState<BarangayInfo>(INITIAL_BARANGAY_INFO);
   const [zones] = useState<Zone[]>(INITIAL_ZONES);
+  const [officials] = useState<BarangayOfficial[]>(INITIAL_OFFICIALS);
 
   const [certificates, setCertificates] = useState<CertificateRecord[]>(INITIAL_CERTIFICATES);
   const [blotters, setBlotters] = useState<BlotterRecord[]>(INITIAL_BLOTTERS);
@@ -172,17 +175,13 @@ const AppContent = () => {
     });
   };
 
-  // App.tsx - Add this handler
   const handleUpdateResident = (updatedRes: Resident) => {
     setResidents(prev => prev.map(r => 
       r.resident_id === updatedRes.resident_id ? updatedRes : r
     ));
     
-    // Update household member count if needed
-    // Find the old resident's household and new resident's household
     const oldResident = residents.find(r => r.resident_id === updatedRes.resident_id);
     if (oldResident && oldResident.household_id !== updatedRes.household_id) {
-      // If household changed, update counts
       setHouseholds(prev => prev.map(h => {
         if (h.household_id === oldResident.household_id) {
           return { ...h, number_of_members: Math.max(0, h.number_of_members - 1) };
@@ -265,9 +264,8 @@ const AppContent = () => {
             />
           )}
 
-          // App.tsx
           {activeTab === 'officials' && hasPermission('view_officials') && (
-            <Officials />  // ← No prop needed
+            <Officials />
           )}
 
           {activeTab === 'certificates' && hasPermission('view_certificates') && (
