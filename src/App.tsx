@@ -2,8 +2,7 @@
 import { useState, useMemo } from 'react';
 import { 
   INITIAL_BARANGAY_INFO, 
-  INITIAL_ZONES, 
-  INITIAL_OFFICIALS, 
+  INITIAL_ZONES,  
   INITIAL_ANNOUNCEMENTS, 
   INITIAL_EVENTS, 
   INITIAL_BLOTTERS, 
@@ -28,7 +27,6 @@ import {
   Zone, 
   Household, 
   Resident, 
-  BarangayOfficial, 
   CertificateRecord, 
   BlotterRecord, 
   Announcement, 
@@ -50,7 +48,6 @@ const AppContent = () => {
   // State for data - using seed data
   const [barangayInfo] = useState<BarangayInfo>(INITIAL_BARANGAY_INFO);
   const [zones] = useState<Zone[]>(INITIAL_ZONES);
-  const [officials] = useState<BarangayOfficial[]>(INITIAL_OFFICIALS);
 
   const [certificates, setCertificates] = useState<CertificateRecord[]>(INITIAL_CERTIFICATES);
   const [blotters, setBlotters] = useState<BlotterRecord[]>(INITIAL_BLOTTERS);
@@ -268,8 +265,9 @@ const AppContent = () => {
             />
           )}
 
+          // App.tsx
           {activeTab === 'officials' && hasPermission('view_officials') && (
-            <Officials officials={officials} />
+            <Officials />  // ← No prop needed
           )}
 
           {activeTab === 'certificates' && hasPermission('view_certificates') && (
