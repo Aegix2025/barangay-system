@@ -1,5 +1,5 @@
-// src/App.tsx - NO DARKMODE
-import { useState, useMemo } from 'react';
+// src/App.tsx - WITH BACKEND INTEGRATION & HOUSEHOLD FIELDS
+import { useState, useMemo, useEffect } from 'react';
 import { 
   INITIAL_BARANGAY_INFO, 
   INITIAL_ZONES, 
@@ -33,8 +33,13 @@ import {
   BlotterRecord, 
   Announcement, 
   BarangayEvent,
-  BlotterStatus
+  BlotterStatus,
+  Gender,
+  CivilStatus
 } from './types';
+
+// API URL - CHANGE THIS TO YOUR BACKEND URL
+const API_URL = 'http://localhost:5000/api/users';
 
 // Inner component that uses hooks
 const AppContent = () => {
@@ -50,6 +55,7 @@ const AppContent = () => {
   // State for data - using seed data
   const [barangayInfo] = useState<BarangayInfo>(INITIAL_BARANGAY_INFO);
   const [zones] = useState<Zone[]>(INITIAL_ZONES);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [officials] = useState<BarangayOfficial[]>(INITIAL_OFFICIALS);
 
   const [certificates, setCertificates] = useState<CertificateRecord[]>(INITIAL_CERTIFICATES);
@@ -60,30 +66,205 @@ const AppContent = () => {
   const [households, setHouseholds] = useState<Household[]>(initialDataset.households);
   const [residents, setResidents] = useState<Resident[]>(initialDataset.residents);
 
-  // ======================== HANDLERS ========================
+  // ======================== LOAD RESIDENTS FROM BACKEND ========================
+  const loadResidents = async () => {
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    
+    if (data.success) {
+      const residentsData: Resident[] = data.data.map((user: any) => ({
+        resident_id: `RES-${String(user.id).padStart(5, '0')}`,
+        first_name: user.name?.split(' ')[0] || '',
+        middle_name: '',
+        last_name: user.name?.split(' ').slice(1).join(' ') || '',
+        suffix: '',
+        gender: 'Male' as Gender,
+        birth_date: '',
+        age: user.age || 0,
+        civil_status: 'Single' as CivilStatus,
+        relationship_to_head: user.relationship_to_head || '',
+        household_id: user.household_id || '',  // ✅ IMPORTANTE!
+        occupation: user.occupation || '',
+        educational_attainment: '',
+        citizenship: 'Filipino',
+        religion: '',
+        voter_status: false,
+        philhealth_member: false,
+        senior_citizen: user.age >= 60 || false,
+        pwd: false,
+        solo_parent: false,
+        contact_number: user.contact_number || '',
+        email: user.email || '',
+        status: 'Active',
+        purok_name: user.purok_name || '',
+        blood_type: '',
+        height: 0,
+        weight: 0,
+        medical_conditions: '',
+        allergies: '',
+        emergency_contact_name: '',
+        emergency_contact_number: '',
+        place_of_birth: '',
+        years_in_barangay: 0,
+        house_ownership: '',
+        house_material: '',
+        water_source: '',
+        electricity_source: '',
+        toilet_type: '',
+        internet_provider: '',
+        government_assistance: [],
+        health_insurance: '',
+        vaccination_status: [],
+        school_attended: '',
+        course_degree: '',
+        scholarship: '',
+        business_type: '',
+        business_location: '',
+        years_in_business: 0,
+        employees_count: 0,
+        pets: [],
+        vehicles: [],
+        skills: [],
+        organization_memberships: [],
+        volunteer_work: [],
+        hobbies: [],
+        languages_spoken: [],
+        monthly_expenses: 0,
+        has_bank_account: false,
+        has_credit_card: false,
+        social_media: '',
+        preferred_contact_method: '',
+      }));
+      
+      setResidents(residentsData);
+    }
+  } catch (error) {
+    console.error('Error loading residents:', error);
+  }
+};
 
-  const handleAddResident = (newRes: Resident) => {
+  // ======================== ADD RESIDENT ========================
+  const handleAddResident = async (newRes: Resident) => {
+  try {
+    const fullName = `${newRes.first_name} ${newRes.last_name}`.trim();
+    
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: fullName || 'Unknown',
+        email: newRes.email || `${newRes.first_name.toLowerCase()}@barangay.com`,
+        age: newRes.age || 0,
+        household_id: newRes.household_id || '',  // ✅ IMPORTANTE!
+        purok_name: newRes.purok_name || '',
+        relationship_to_head: newRes.relationship_to_head || '',
+        contact_number: newRes.contact_number || '',
+        occupation: newRes.occupation || '',
+      }),
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      await loadResidents();
+      addNotification({
+        title: 'Resident Added Successfully',
+        message: `${fullName} has been registered.`,
+        type: 'success',
+      });
+      addLog({
+        userId: 'current-user',
+        userRole: role,
+        action: 'add',
+        module: 'Residents',
+        details: `Added resident: ${fullName}`,
+      });
+    } else {
+      alert('Failed to add resident: ' + data.message);
+    }
+  } catch (error) {
+    console.error('Error adding resident:', error);
     setResidents(prev => [newRes, ...prev]);
-    setHouseholds(prev => prev.map(h => {
-      if (h.household_id === newRes.household_id) {
-        return { ...h, number_of_members: h.number_of_members + 1 };
-      }
-      return h;
-    }));
     addNotification({
-      title: 'New Resident Added',
-      message: `${newRes.first_name} ${newRes.last_name} has been registered.`,
-      type: 'success',
+      title: 'Resident Added (Offline Mode)',
+      message: `${newRes.first_name} ${newRes.last_name} added locally.`,
+      type: 'warning',
     });
-    addLog({
-      userId: 'current-user',
-      userRole: role,
-      action: 'add',
-      module: 'Residents',
-      details: `Added resident: ${newRes.first_name} ${newRes.last_name}`,
-    });
+  }
+};
+
+  // ======================== UPDATE RESIDENT ========================
+  const handleUpdateResident = async (updatedRes: Resident) => {
+    try {
+      const id = updatedRes.resident_id.replace('RES-', '');
+      const fullName = `${updatedRes.first_name} ${updatedRes.last_name}`.trim();
+      
+      // Find the household to get household data
+      const household = households.find(h => h.household_id === updatedRes.household_id);
+      
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: fullName,
+          email: updatedRes.email,
+          age: updatedRes.age,
+          household_id: updatedRes.household_id || '',
+          purok_name: updatedRes.purok_name || '',
+          relationship_to_head: updatedRes.relationship_to_head || '',
+          contact_number: updatedRes.contact_number || '',
+          occupation: updatedRes.occupation || '',
+          family_name: household?.family_name || '',
+          household_head: household?.household_head || '',
+          household_type: household?.household_type || '',
+          monthly_income: household?.monthly_income || 0,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        await loadResidents();
+        
+        addNotification({
+          title: 'Resident Updated',
+          message: `${fullName}'s information has been updated.`,
+          type: 'success',
+        });
+        
+        addLog({
+          userId: 'current-user',
+          userRole: role,
+          action: 'edit',
+          module: 'Residents',
+          details: `Updated resident: ${fullName}`,
+        });
+      }
+    } catch (error) {
+      console.error('Error updating resident:', error);
+      // Fallback: Update locally if backend is not running
+      setResidents(prev => prev.map(r => 
+        r.resident_id === updatedRes.resident_id ? updatedRes : r
+      ));
+      addNotification({
+        title: 'Resident Updated (Offline Mode)',
+        message: `${updatedRes.first_name} ${updatedRes.last_name} updated locally.`,
+        type: 'warning',
+      });
+    }
   };
 
+  // ======================== LOAD RESIDENTS ON MOUNT ========================
+  useEffect(() => {
+    loadResidents();
+  }, []);
+
+  // ======================== HOUSEHOLD HANDLERS ========================
   const handleAddHousehold = (newHousehold: Household) => {
     setHouseholds(prev => [newHousehold, ...prev]);
     addNotification({
@@ -100,6 +281,7 @@ const AppContent = () => {
     });
   };
 
+  // ======================== CERTIFICATE HANDLERS ========================
   const handleIssueCertificate = (cert: CertificateRecord) => {
     setCertificates(prev => [cert, ...prev]);
     addNotification({
@@ -116,6 +298,7 @@ const AppContent = () => {
     });
   };
 
+  // ======================== BLOTTER HANDLERS ========================
   const handleAddBlotter = (blotter: BlotterRecord) => {
     setBlotters(prev => [blotter, ...prev]);
     addNotification({
@@ -143,6 +326,7 @@ const AppContent = () => {
     });
   };
 
+  // ======================== ANNOUNCEMENTS & EVENTS HANDLERS ========================
   const handleAddAnnouncement = (ann: Announcement) => {
     setAnnouncements(prev => [ann, ...prev]);
     addNotification({
@@ -175,39 +359,7 @@ const AppContent = () => {
     });
   };
 
-  const handleUpdateResident = (updatedRes: Resident) => {
-    setResidents(prev => prev.map(r => 
-      r.resident_id === updatedRes.resident_id ? updatedRes : r
-    ));
-    
-    const oldResident = residents.find(r => r.resident_id === updatedRes.resident_id);
-    if (oldResident && oldResident.household_id !== updatedRes.household_id) {
-      setHouseholds(prev => prev.map(h => {
-        if (h.household_id === oldResident.household_id) {
-          return { ...h, number_of_members: Math.max(0, h.number_of_members - 1) };
-        }
-        if (h.household_id === updatedRes.household_id) {
-          return { ...h, number_of_members: h.number_of_members + 1 };
-        }
-        return h;
-      }));
-    }
-    
-    addNotification({
-      title: 'Resident Updated',
-      message: `${updatedRes.first_name} ${updatedRes.last_name}'s information has been updated.`,
-      type: 'success',
-    });
-    
-    addLog({
-      userId: 'current-user',
-      userRole: role,
-      action: 'edit',
-      module: 'Residents',
-      details: `Updated resident: ${updatedRes.first_name} ${updatedRes.last_name}`,
-    });
-  };
-
+  // ======================== RENDER ========================
   return (
     <div className="min-h-screen w-full text-slate-800 flex flex-col font-sans selection:bg-emerald-200 selection:text-emerald-900 bg-white">
       {/* Top Header & Navigation */}
@@ -251,7 +403,7 @@ const AppContent = () => {
               households={households}
               onAddResident={handleAddResident}
               onAddHousehold={handleAddHousehold}
-              onUpdateResident={handleUpdateResident} 
+              onUpdateResident={handleUpdateResident}
             />
           )}
 

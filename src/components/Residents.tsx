@@ -1,4 +1,4 @@
-// src/components/Residents.tsx - COMPLETE FIXED VERSION
+// src/components/Residents.tsx - COMPLETE WITH ALL EDITABLE FIELDS
 import { useState, useMemo, useEffect, useRef, createContext, useContext } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -48,8 +48,9 @@ interface Props {
   onUpdateResident?: (resident: Resident) => void;
 }
 
-// Extended Resident type with additional fields
+// Extended Resident type with additional fields - COMPLETE VERSION
 interface ExtendedResident extends Resident {
+  // ========== MEDICAL FIELDS ==========
   blood_type?: string;
   height?: number;
   weight?: number;
@@ -57,40 +58,68 @@ interface ExtendedResident extends Resident {
   allergies?: string;
   emergency_contact_name?: string;
   emergency_contact_number?: string;
+  
+  // ========== BIRTH & PLACE ==========
   place_of_birth?: string;
   years_in_barangay?: number;
+  
+  // ========== LIVING CONDITIONS ==========
   house_ownership?: string;
   house_material?: string;
   water_source?: string;
   electricity_source?: string;
   toilet_type?: string;
   internet_provider?: string;
+  
+  // ========== GOVERNMENT & FINANCIAL ==========
   government_assistance?: string[];
   health_insurance?: string;
   vaccination_status?: string[];
+  has_bank_account?: boolean;
+  has_credit_card?: boolean;
+  
+  // ========== EDUCATION ==========
   school_attended?: string;
   course_degree?: string;
   scholarship?: string;
+  
+  // ========== LIVELIHOOD ==========
   business_type?: string;
   business_location?: string;
   years_in_business?: number;
   employees_count?: number;
+  monthly_expenses?: number;
+  
+  // ========== PETS & VEHICLES ==========
   pets?: { type: string; count: number; }[];
   vehicles?: { type: string; count: number; }[];
+  
+  // ========== SKILLS & COMMUNITY ==========
   skills?: string[];
   organization_memberships?: string[];
   volunteer_work?: string[];
   hobbies?: string[];
   languages_spoken?: string[];
-  monthly_expenses?: number;
-  has_bank_account?: boolean;
-  has_credit_card?: boolean;
+  
+  // ========== CONTACT ==========
   social_media?: string;
   preferred_contact_method?: string;
-  // Form-only fields (not in Resident type)
+  
+  // ========== FORM-ONLY FIELDS (not in Resident type) ==========
   birth_month?: string;
   birth_day?: string;
   birth_year?: string;
+  
+  // ========== HOUSEHOLD FIELDS ==========
+  family_name?: string;
+  household_head?: string;
+  household_first_name?: string;
+  household_middle_name?: string;
+  household_last_name?: string;
+  address?: string;
+  household_type?: string;
+  number_of_members?: number;
+  monthly_income?: number;
 }
 
 // ============================================================
@@ -191,9 +220,6 @@ const displayArray = (arr: string[] | undefined) => {
 
 // ============================================================
 // EDIT FIELD CONTEXT
-// The edit inputs live at module scope so they keep their identity
-// between renders; otherwise React remounts them on every keystroke
-// and the focused input loses focus.
 // ============================================================
 interface EditFieldContextValue {
   isEditMode: boolean;
@@ -432,7 +458,7 @@ export const Residents: React.FC<Props> = ({
   const bloodTypes = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
   const houseOwnershipTypes = ['', 'Owned', 'Rented', 'Living with Relatives', 'Informal Settler', 'Other'];
   const houseMaterials = ['', 'Concrete', 'Wood', 'Mixed (Concrete & Wood)', 'Light Materials', 'Other'];
-  const waterSources = ['', 'Maynilad', 'Deep Well', 'Spring', 'Rainwater', 'Delivered', 'Other'];
+  const waterSources = ['', 'Liwad', 'Deep Well', 'Spring', 'Rainwater', 'Delivered', 'Other'];
   const electricitySources = ['', 'Penelco', 'Solar', 'Generator', 'Other'];
   const toiletTypes = ['', 'Flush (Water Sealed)', 'Pit Latrine', 'Shared', 'Other'];
   const internetProviders = ['', 'PLDT', 'Globe', 'Converge', 'Sky', 'Starlink', 'DITO', 'Other'];
@@ -1069,12 +1095,12 @@ Please select a valid purok.`);
       case 0: // BASIC INFO
         return (
           <div className="space-y-4">
-            {/* Household Information Card */}
+            {/* Household Information Card - COMPLETELY EDITABLE */}
             <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
               <h4 className="font-bold text-amber-700 mb-2 flex items-center gap-2">
                 <HomeIcon className="w-4 h-4 text-amber-500" />
                 <span>Household Information</span>
-                {isEditMode && <span className="text-xs text-blue-500 font-normal">(Read Only)</span>}
+                {isEditMode && <span className="text-xs text-blue-500 font-normal">(Editing)</span>}
               </h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>
@@ -1083,50 +1109,232 @@ Please select a valid purok.`);
                 </div>
                 <div>
                   <span className="text-amber-600 block text-xs">Family Name</span>
-                  <span className="font-bold text-gray-800">{residentHousehold?.family_name || '—'}</span>
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      value={editingResident?.family_name || residentHousehold?.family_name || ''}
+                      onChange={(e) => {
+                        setEditingResident(prev => prev ? {
+                          ...prev,
+                          family_name: e.target.value
+                        } : null);
+                      }}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="Family Name"
+                    />
+                  ) : (
+                    <span className="font-bold text-gray-800">{residentHousehold?.family_name || '—'}</span>
+                  )}
                 </div>
                 <div className="col-span-2">
                   <span className="text-amber-600 block text-xs">Household Head (Full Name)</span>
-                  <span className="font-bold text-gray-800 text-base">
-                    {residentHousehold?.household_head || '—'}
-                  </span>
+                  {isEditMode ? (
+                    <div className="grid grid-cols-3 gap-1">
+                      <input
+                        type="text"
+                        value={editingResident?.household_first_name || ''}
+                        onChange={(e) => {
+                          setEditingResident(prev => prev ? {
+                            ...prev,
+                            household_first_name: e.target.value
+                          } : null);
+                        }}
+                        className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="First Name"
+                      />
+                      <input
+                        type="text"
+                        value={editingResident?.household_middle_name || ''}
+                        onChange={(e) => {
+                          setEditingResident(prev => prev ? {
+                            ...prev,
+                            household_middle_name: e.target.value
+                          } : null);
+                        }}
+                        className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Middle Name"
+                      />
+                      <input
+                        type="text"
+                        value={editingResident?.household_last_name || ''}
+                        onChange={(e) => {
+                          setEditingResident(prev => prev ? {
+                            ...prev,
+                            household_last_name: e.target.value
+                          } : null);
+                        }}
+                        className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Last Name"
+                      />
+                    </div>
+                  ) : (
+                    <span className="font-bold text-gray-800 text-base">
+                      {residentHousehold?.household_head || '—'}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <span className="text-amber-600 block text-xs">Purok</span>
-                  <span className="font-bold text-gray-800">{residentZone?.zone_name || resident.purok_name || '—'}</span>
+                  {isEditMode ? (
+                    <select
+                      value={editingResident?.purok_name || resident.purok_name || ''}
+                      onChange={(e) => {
+                        setEditingResident(prev => prev ? {
+                          ...prev,
+                          purok_name: e.target.value
+                        } : null);
+                      }}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      <option value="">Select Purok</option>
+                      <option value="Purok 1">Purok 1</option>
+                      <option value="Purok 2">Purok 2</option>
+                      <option value="Purok 3">Purok 3</option>
+                      <option value="Purok 4">Purok 4</option>
+                      <option value="Purok 5">Purok 5</option>
+                      <option value="Purok 6">Purok 6</option>
+                      <option value="Purok 7">Purok 7</option>
+                      <option value="Purok 8">Purok 8</option>
+                    </select>
+                  ) : (
+                    <span className="font-bold text-gray-800">{residentZone?.zone_name || resident.purok_name || '—'}</span>
+                  )}
                 </div>
                 <div>
                   <span className="text-amber-600 block text-xs">Address</span>
-                  <span className="font-bold text-gray-800">
-                    {residentHousehold ? `#${residentHousehold.house_number}, ${residentHousehold.street_name}` : '—'}
-                  </span>
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      value={editingResident?.address || (residentHousehold ? `#${residentHousehold.house_number}, ${residentHousehold.street_name}` : '')}
+                      onChange={(e) => {
+                        setEditingResident(prev => prev ? {
+                          ...prev,
+                          address: e.target.value
+                        } : null);
+                      }}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="House #, Street"
+                    />
+                  ) : (
+                    <span className="font-bold text-gray-800">
+                      {residentHousehold ? `#${residentHousehold.house_number}, ${residentHousehold.street_name}` : '—'}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <span className="text-amber-600 block text-xs">Relationship to Head</span>
-                  <span className="font-bold text-gray-800">{resident.relationship_to_head || '—'}</span>
+                  {isEditMode ? (
+                    <select
+                      value={editingResident?.relationship_to_head || resident.relationship_to_head || ''}
+                      onChange={(e) => {
+                        setEditingResident(prev => prev ? {
+                          ...prev,
+                          relationship_to_head: e.target.value
+                        } : null);
+                      }}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      <option value="">Select Relationship</option>
+                      <option value="Head of Household">Head of Household</option>
+                      <option value="Spouse">Spouse</option>
+                      <option value="Son">Son</option>
+                      <option value="Daughter">Daughter</option>
+                      <option value="Cousin">Cousin</option>
+                      <option value="Nephew">Nephew</option>
+                      <option value="Relative">Relative</option>
+                      <option value="Boarder">Boarder</option>
+                    </select>
+                  ) : (
+                    <span className="font-bold text-gray-800">{resident.relationship_to_head || '—'}</span>
+                  )}
                 </div>
                 <div>
                   <span className="text-amber-600 block text-xs">Household Type</span>
-                  <span className="font-bold text-gray-800">{residentHousehold?.household_type || '—'}</span>
+                  {isEditMode ? (
+                    <select
+                      value={editingResident?.household_type || residentHousehold?.household_type || ''}
+                      onChange={(e) => {
+                        setEditingResident(prev => prev ? {
+                          ...prev,
+                          household_type: e.target.value
+                        } : null);
+                      }}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      <option value="">Select Type</option>
+                      <option value="Nuclear">Nuclear</option>
+                      <option value="Extended">Extended</option>
+                      <option value="Single Parent">Single Parent</option>
+                      <option value="Single Person">Single Person</option>
+                      <option value="Joint">Joint</option>
+                    </select>
+                  ) : (
+                    <span className="font-bold text-gray-800">{residentHousehold?.household_type || '—'}</span>
+                  )}
                 </div>
                 <div>
                   <span className="text-amber-600 block text-xs">Members</span>
-                  <span className="font-bold text-gray-800">{residentHousehold?.number_of_members || '—'}</span>
+                  {isEditMode ? (
+                    <input
+                      type="number"
+                      value={editingResident?.number_of_members || residentHousehold?.number_of_members || ''}
+                      onChange={(e) => {
+                        setEditingResident(prev => prev ? {
+                          ...prev,
+                          number_of_members: Number(e.target.value)
+                        } : null);
+                      }}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="Number of Members"
+                    />
+                  ) : (
+                    <span className="font-bold text-gray-800">{residentHousehold?.number_of_members || '—'}</span>
+                  )}
                 </div>
                 <div>
                   <span className="text-amber-600 block text-xs">Contact Number</span>
-                  <span className="font-bold text-gray-800">{residentHousehold?.contact_number || '—'}</span>
+                  {isEditMode ? (
+                    <input
+                      type="text"
+                      value={editingResident?.contact_number || residentHousehold?.contact_number || ''}
+                      onChange={(e) => {
+                        setEditingResident(prev => prev ? {
+                          ...prev,
+                          contact_number: e.target.value
+                        } : null);
+                      }}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="Contact Number"
+                    />
+                  ) : (
+                    <span className="font-bold text-gray-800">{residentHousehold?.contact_number || '—'}</span>
+                  )}
                 </div>
                 <div>
                   <span className="text-amber-600 block text-xs">Monthly Income</span>
-                  <span className="font-bold text-emerald-600">
-                    {residentHousehold?.monthly_income ? `₱${residentHousehold.monthly_income.toLocaleString()}` : '—'}
-                  </span>
+                  {isEditMode ? (
+                    <input
+                      type="number"
+                      value={editingResident?.monthly_income || residentHousehold?.monthly_income || ''}
+                      onChange={(e) => {
+                        setEditingResident(prev => prev ? {
+                          ...prev,
+                          monthly_income: Number(e.target.value)
+                        } : null);
+                      }}
+                      className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="Monthly Income"
+                    />
+                  ) : (
+                    <span className="font-bold text-emerald-600">
+                      {residentHousehold?.monthly_income ? `₱${residentHousehold.monthly_income.toLocaleString()}` : '—'}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Personal Information */}
+            {/* Personal Information - COMPLETELY EDITABLE */}
             <div className="bg-white p-4 rounded-xl border border-gray-200">
               <h4 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
                 <UserCircle className="w-4 h-4 text-purple-500" />
@@ -1294,7 +1502,7 @@ Please select a valid purok.`);
           </div>
         );
         
-      case 5: // HOUSEHOLD
+      case 5: // HOUSEHOLD (Living Conditions)
         return (
           <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-200">
             <div className="flex items-center gap-2 text-amber-700 font-semibold mb-3">
