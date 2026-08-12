@@ -56,7 +56,7 @@ const AppContent = () => {
   const [barangayInfo] = useState<BarangayInfo>(INITIAL_BARANGAY_INFO);
   const [zones] = useState<Zone[]>(INITIAL_ZONES);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [officials] = useState<BarangayOfficial[]>(INITIAL_OFFICIALS);
+  const [_officials] = useState<BarangayOfficial[]>(INITIAL_OFFICIALS);
 
   const [certificates, setCertificates] = useState<CertificateRecord[]>(INITIAL_CERTIFICATES);
   const [blotters, setBlotters] = useState<BlotterRecord[]>(INITIAL_BLOTTERS);
