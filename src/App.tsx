@@ -38,8 +38,11 @@ import {
   CivilStatus
 } from './types';
 
-// API URL - CHANGE THIS TO YOUR BACKEND URL
+// PALITAN ITO:
 const API_URL = 'http://localhost:5000/api/users';
+
+// NG GANITO (gamitin ang Vercel URL mo):
+const API_URL = 'https://barangay-system.vercel.app/api/users';
 
 // Inner component that uses hooks
 const AppContent = () => {
