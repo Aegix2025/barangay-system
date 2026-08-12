@@ -61,3 +61,4 @@ public/           Static assets served as-is (logo, background)
   literally in the source so the compiler can find them — avoid building class names by string concatenation.
 - Styling is light-mode only by design.
 
+
