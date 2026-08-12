@@ -60,3 +60,4 @@ public/           Static assets served as-is (logo, background)
 - Tailwind is compiled through PostCSS (`tailwind.config.js`, `postcss.config.js`); class names must appear
   literally in the source so the compiler can find them — avoid building class names by string concatenation.
 - Styling is light-mode only by design.
+
