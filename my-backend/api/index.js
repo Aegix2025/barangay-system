@@ -140,5 +140,14 @@ app.get('/', (req, res) => {
   });
 });
 
+const PORT = process.env.PORT || 5000;
+
+// Start server (for local development)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`✅ Server is running on http://localhost:${PORT}`);
+  });
+}
+
 // Export for Vercel
 module.exports = app;
