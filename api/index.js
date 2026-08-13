@@ -1,0 +1,1 @@
+module.exports = require('../my-backend/index.js');
